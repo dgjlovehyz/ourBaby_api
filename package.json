@@ -1,0 +1,22 @@
+{
+  "name": "ourbaby_api",
+  "version": "1.0.0",
+  "description": "这是一个基于wechat的项目，",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgjlovehyz/ourBaby_api.git"
+  },
+  "author": "DGJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dgjlovehyz/ourBaby_api/issues"
+  },
+  "homepage": "https://github.com/dgjlovehyz/ourBaby_api#readme",
+  "dependencies": {
+    "wechat": "^2.1.0"
+  }
+}
