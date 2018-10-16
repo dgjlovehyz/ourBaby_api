@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dgjlovehyz/ourBaby_api#readme",
   "dependencies": {
+    "express": "^4.16.4",
     "wechat": "^2.1.0"
   }
 }
