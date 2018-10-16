@@ -55,3 +55,4 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 }));
 
 app.listen(8090);
+console.log('server start')
