@@ -8,9 +8,9 @@ const app = express();
 
 
 var config = {
-    token: '3F1CD7724400A6F9DE2BFE92441981B9',
-    appid: 'wx3312ee6adf47851c',
-    encodingAESKey: 'K75MrY3SsnWoW3SSg6uk4KDO932ahlxSLFMHRpcXBEg',
+    token: '9E8931D855252A4E8A4DF61AE835F85B',
+    appid: 'wx23147d6ed2ac27ef',
+    encodingAESKey: 'KUygOjXypVoFm4oPTPZnSA9I4SeFny439RX5LOQZt4x',
     checkSignature: true // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
 };
 
