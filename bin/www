@@ -143,7 +143,7 @@ app.get('/wx/msg', (req, res, next) => {
     // if (!params.nonce)
     //     return callback(new businessException("随机数错误"))
 
-    let dict = { token: config.wxToken, timestamp: params.timestamp, nonce: params.nonce };
+    let dict = { token: config.token, timestamp: params.timestamp, nonce: params.nonce };
     var sha1Str = '';
     for (let key of Object.values(dict).sort()) {
         console.log('key：' + key)
