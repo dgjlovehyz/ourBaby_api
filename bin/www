@@ -137,6 +137,7 @@ router.get('/wx/msg', (req, res, next) => {
     console.log('req.query', req.query)
 })
 
+app.use(router)
 
 app.listen(80);
 console.log('server start ,, prot : 80')
