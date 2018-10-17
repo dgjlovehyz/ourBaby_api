@@ -131,13 +131,13 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     console.log('device_event message:', message)
 })));
 
-var router = express.Router()
-
-router.get('/wx/msg', (req, res, next) => {
+app.get('/wx/msg', (req, res, next) => {
     console.log('req.query', req.query)
-})
 
-app.use(router)
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' })
+    return res.end(obj)
+})
 
 app.listen(80);
 console.log('server start ,, prot : 80')
