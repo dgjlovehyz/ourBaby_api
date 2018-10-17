@@ -45,6 +45,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // MediaId: 'OMYnpghh8fRfzHL8obuboDN9rmLig4s0xdpoNT6a5BoFZWufbE6srbCKc_bxduzS',
     // Format: 'amr',
     // MsgId: '5837397520665436492' }
+    console.log('voice message:', message)
 }).video(function (message, req, res, next) {
     // message为视频内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -54,6 +55,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // MediaId: 'OMYnpghh8fRfzHL8obuboDN9rmLig4s0xdpoNT6a5BoFZWufbE6srbCKc_bxduzS',
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
+    console.log('video message:', message)
 }).shortvideo(function (message, req, res, next) {
     // message为短视频内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -63,6 +65,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // MediaId: 'OMYnpghh8fRfzHL8obuboDN9rmLig4s0xdpoNT6a5BoFZWufbE6srbCKc_bxduzS',
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
+    console.log('shortvideo message:', message)
 }).location(function (message, req, res, next) {
     // message为位置内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -74,6 +77,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // Scale: '15',
     // Label: {},
     // MsgId: '5837398761910985062' }
+    console.log('location message:', message)
 }).link(function (message, req, res, next) {
     // message为链接内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -84,6 +88,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // Description: '公众平台官网链接',
     // Url: 'http://1024.com/',
     // MsgId: '5837397520665436492' }
+    console.log('link message:', message)
 }).event(function (message, req, res, next) {
     // message为事件内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -95,6 +100,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // Longitude: '113.352425',
     // Precision: '119.385040',
     // MsgId: '5837397520665436492' }
+    console.log('event message:', message)
 }).device_text(function (message, req, res, next) {
     // message为设备文本消息内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -107,6 +113,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // SessionID: '9394',
     // MsgId: '5837397520665436492',
     // OpenID: 'oPKu7jgOibOA-De4u8J2RuNKpZRw' }
+    console.log('device_text message:', message)
 }).device_event(function (message, req, res, next) {
     // message为设备事件内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -121,6 +128,7 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     // SessionID: '9394',
     // MsgId: '5837397520665436492',
     // OpenID: 'oPKu7jgOibOA-De4u8J2RuNKpZRw' }
+    console.log('device_event message:', message)
 })));
 
 app.listen(80);
