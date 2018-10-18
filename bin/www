@@ -148,29 +148,29 @@ app.use('/wx/msg', wechat('some token', wechat.text(function (message, req, res,
     console.log('device_event message:', message)
 })));
 
-app.get('/wx/msg', (req, res, next) => {
-    //微信公众号接通
-    let params = req.query
-    let dict = { token: config.token, timestamp: params.timestamp, nonce: params.nonce };
-    var sha1Str = '';
-    for (let key of Object.values(dict).sort()) {
-        console.log('key：' + key)
-        sha1Str = sha1Str + key
-    }
-    var sha1 = crypto.createHash("sha1");
-    sha1.update(sha1Str)
-    console.log("sha1Str:" + sha1Str)
-    console.log("timestamp:" + params.timestamp)
-    console.log("nonce:" + params.nonce)
-    var _signature = sha1.digest('hex')
-    console.log("signature:" + params.signature)
-    console.log("_signature:" + _signature)
-    console.log("echostr:" + params.echostr)
-    res.writeHead(200, { 'Content-Type': 'text/plain' })
-    if (_signature == params.signature)
-        return res.end(params.echostr)
-    return res.end('验证失败')
-})
+// app.get('/wx/msg', (req, res, next) => {
+//     //微信公众号接通
+//     let params = req.query
+//     let dict = { token: config.token, timestamp: params.timestamp, nonce: params.nonce };
+//     var sha1Str = '';
+//     for (let key of Object.values(dict).sort()) {
+//         console.log('key：' + key)
+//         sha1Str = sha1Str + key
+//     }
+//     var sha1 = crypto.createHash("sha1");
+//     sha1.update(sha1Str)
+//     console.log("sha1Str:" + sha1Str)
+//     console.log("timestamp:" + params.timestamp)
+//     console.log("nonce:" + params.nonce)
+//     var _signature = sha1.digest('hex')
+//     console.log("signature:" + params.signature)
+//     console.log("_signature:" + _signature)
+//     console.log("echostr:" + params.echostr)
+//     res.writeHead(200, { 'Content-Type': 'text/plain' })
+//     if (_signature == params.signature)
+//         return res.end(params.echostr)
+//     return res.end('验证失败')
+// })
 
 app.listen(80);
 console.log('server start ,, prot : 80')
