@@ -26,7 +26,7 @@ class biz {
         console.log("signature:" + params.signature)
         console.log("_signature:" + _signature)
         console.log("echostr:" + params.echostr)
-        res.writeHead(200, { 'Content-Type': 'text/plain' })
+        
         if (_signature == params.signature)
             return params.echostr
         return '验证失败'
