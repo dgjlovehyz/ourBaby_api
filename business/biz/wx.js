@@ -28,8 +28,8 @@ class biz {
         console.log("echostr:" + params.echostr)
         res.writeHead(200, { 'Content-Type': 'text/plain' })
         if (_signature == params.signature)
-            return res.end(params.echostr)
-        return res.end('验证失败')
+            return params.echostr
+        return '验证失败'
     }
 }
 
