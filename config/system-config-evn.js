@@ -2,7 +2,7 @@ const mysql = require('mysql');
 
 module.exports = {
     http: {
-        port: 3000,
+        port: 80,
     },
     system: {
         debug: true
