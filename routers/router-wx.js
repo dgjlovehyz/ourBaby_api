@@ -6,7 +6,7 @@ const wechat = require('wechat');
 const wxConfig = require('../config/system-config').wechat.config
 
 router.get('/wx/msg', async (req, res, next) => {
-    let option = res.body;
+    let option = res.query;
     let result = await wxCtr.wxAuto(option)
     if (result)
         res.json(result)
