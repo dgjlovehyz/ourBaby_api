@@ -1,6 +1,7 @@
 'use strict'
 
 const wxConfig = require('../../config/system-config').wechat.config;
+const crypto = require('crypto')
 
 class biz {
     /**
