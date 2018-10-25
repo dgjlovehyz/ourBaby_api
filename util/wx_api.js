@@ -13,7 +13,6 @@ class wxApi {
         }
         return new Promise((resolve, reject) => {
             request(reqInfo, async (err, res, body) => {
-                console.log('err', err, body)
                 if (err) reject(err)
                 if (!!body.errcode) reject(body)
                 return resolve(body);

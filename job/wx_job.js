@@ -1,7 +1,6 @@
 const schedule = require('node-schedule');
 const wxApi = require('../util/wx_api');
 const redisConfig = require('../config/system-config').redis;
-console.log('redis ', redisConfig)
 const redis = require('../framework/util/redis_client').redis(redisConfig);
 
 function getToken() {
