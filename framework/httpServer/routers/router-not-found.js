@@ -10,5 +10,5 @@ const
  */
 module.exports = (req, res, next) => {
     console.log('ip-' + req.ip)
-    next(new Exception.NotFoundException('Not Found'));
+    next(Exception.NotFoundException('Not Found'));
 }
