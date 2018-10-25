@@ -2,7 +2,7 @@ const mysql = require('mysql');
 
 module.exports = {
     http: {
-        port: 3000,
+        port: 80,
     },
     system: {
         debug: true
@@ -21,7 +21,7 @@ module.exports = {
     }),
     redis: {
         port: 6379,
-        host: '121.196.212.213',
+        host: '172.16.127.187',
         password: 'dgj123456',  // 密码
         db: 0,
         family: 4, // ip地址族

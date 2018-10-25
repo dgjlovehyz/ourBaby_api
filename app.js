@@ -27,3 +27,5 @@ require('./framework/httpServer')({
     port: sysconf.http.port,
     routes: routes
 })
+
+require('./job/wx_job')()

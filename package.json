@@ -23,8 +23,12 @@
     "express": "^4.16.4",
     "express-middlewares-js": "^1.0.3",
     "http": "0.0.0",
+    "ioredis": "^4.2.0",
+    "lodash": "^4.17.11",
+    "lru-cache": "^4.1.3",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
+    "node-schedule": "^1.3.0",
     "underscore": "^1.9.1",
     "wechat": "^2.1.0"
   }

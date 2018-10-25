@@ -5,6 +5,8 @@ const wxCtr = require('../business/controllers/wx');
 const wechat = require('wechat');
 const wxConfig = require('../config/system-config').wechat.config
 const Exception = require('../framework/exception/exception')
+
+
 router.get('/wx/msg', async (req, res, next) => {
     let option = req.query;
     console.log('fgdrsg', option)
