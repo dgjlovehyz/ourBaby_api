@@ -28,4 +28,7 @@ require('./framework/httpServer')({
     routes: routes
 })
 
+//开启job
 require('./job/wx_job')()
+//启动菜单创建
+require('./util/menu')()

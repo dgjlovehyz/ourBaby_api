@@ -12,6 +12,24 @@ const
         const app = express()
         app.set('port', option.port)
         app.use(logger('ourBaby'))
+        app.use(async (req, res, next) => {
+            try {
+                // 修正path
+                // req.path = req.path.replace(/\/{2,}/g, '/');
+                // req.url = req.url.replace(/\/{2,}/g, '/');
+                // let req = req.request;
+                let log = `---------ip监控----------
+                    请求url地址：${req.headers["host"] + req.originalUrl};
+                    远程ip地址：${req.ip};
+                    远程ip地址族：${JSON.stringify(req.ips || [])};
+                    method:${req.method};
+                `;
+                console.info(log);
+            } catch (error) {
+                console.log('获取ip地址错误：' + error);
+            }
+            return next();
+        });
         app.use(express.query())
         app.use(bodyParser.json())
         app.use(bodyParser.urlencoded({ extended: false }))

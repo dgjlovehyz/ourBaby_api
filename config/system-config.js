@@ -11,11 +11,9 @@ const config = {
         api: {
             //获取微信token
             getWxToken: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}',
-
+            menuCreate: 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token={0}',
         }
-
     }
-
 }
 
 Object.assign(config, require('./system-config-evn'))
