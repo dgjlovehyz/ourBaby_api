@@ -12,6 +12,7 @@ class dao {
         return new Promise((resolve, reject) => {
             connection.query(sql, params, (err, result) => {
                 if (err) { console.error('err', err); return reject(err) }
+                console.log('sql result', result)
                 return resolve(result)
             });
         });
