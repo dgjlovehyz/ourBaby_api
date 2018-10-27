@@ -18,7 +18,7 @@ router.get('/wx/msg', async (req, res, next) => {
     res.end(Exception.BusinessException('验证失败'))
 })
 
-router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res, next) {
+router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req, res, next) {
     // message为文本内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -37,7 +37,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
             url: ''
         }
     ]);
-}).image(function (message, req, res, next) {
+}).image(async function (message, req, res, next) {
     // message为图片内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -55,7 +55,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
             url: ''
         }
     ]);
-}).voice(function (message, req, res, next) {
+}).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -65,7 +65,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // Format: 'amr',
     // MsgId: '5837397520665436492' }
     console.log('voice message:', message)
-}).video(function (message, req, res, next) {
+}).video(async function (message, req, res, next) {
     // message为视频内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -75,7 +75,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
     console.log('video message:', message)
-}).shortvideo(function (message, req, res, next) {
+}).shortvideo(async function (message, req, res, next) {
     // message为短视频内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -85,7 +85,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
     console.log('shortvideo message:', message)
-}).location(function (message, req, res, next) {
+}).location(async function (message, req, res, next) {
     // message为位置内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -97,7 +97,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // Label: {},
     // MsgId: '5837398761910985062' }
     console.log('location message:', message)
-}).link(function (message, req, res, next) {
+}).link(async function (message, req, res, next) {
     // message为链接内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -108,7 +108,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // Url: 'http://1024.com/',
     // MsgId: '5837397520665436492' }
     console.log('link message:', message)
-}).event(function (message, req, res, next) {
+}).event(async function (message, req, res, next) {
     // message为事件内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -128,14 +128,14 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
         res.reply(await wxEventCtr.userSubscribe(message))
     } else if (message.Event === 'unsubscribe') {
         //取消关注
-
+        res.reply(await wxEventCtr.userUnsubscribe(message))
     } else {
         res.reply({
             content: '没有该功能，反正也用不上，哈哈哈！',
             type: 'text'
         });
     }
-}).device_text(function (message, req, res, next) {
+}).device_text(async function (message, req, res, next) {
     // message为设备文本消息内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
@@ -148,7 +148,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // MsgId: '5837397520665436492',
     // OpenID: 'oPKu7jgOibOA-De4u8J2RuNKpZRw' }
     console.log('device_text message:', message)
-}).device_event(function (message, req, res, next) {
+}).device_event(async function (message, req, res, next) {
     // message为设备事件内容
     // { ToUserName: 'gh_d3e07d51b513',
     // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
