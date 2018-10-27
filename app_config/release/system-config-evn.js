@@ -11,7 +11,7 @@ module.exports = {
         port: 3001
     },
     db: mysql.createPool({
-        host: '121.196.212.213',
+        host: '172.16.127.187',
         user: 'root',
         password: 'My*sql123',
         database: 'mybaby',

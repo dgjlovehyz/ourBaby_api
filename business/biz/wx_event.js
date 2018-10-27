@@ -8,7 +8,7 @@ class biz {
      * 用户关注公众号的时候
      */
     static async userSubscribe(params) {
-
+        console.log('biz')
         return dao.manageTransactionConnection(async (connection) => {
             let result = await userDao.getUser(connection, { FromUserName: params.FromUserName })
             console.log('result', result)
