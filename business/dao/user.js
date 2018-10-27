@@ -11,7 +11,7 @@ class dao {
     static async exec(connection, sql, params) {
         return new Promise((resolve, reject) => {
             connection.query(sql, params, (err, result) => {
-                if (err) return reject(err)
+                if (err) { console.error('err', err); return reject(err) }
                 return resolve(result)
             });
         });
@@ -45,7 +45,7 @@ class dao {
         sqlParam.push(obj)
         sqlParam.push(params.FromUserName)
         let result = await dao.exec(connection, sql, sqlParam);
-        return result.affectedRows > 0 ? Promise.resolve('更新成功') : Promise.reject('新增失败');
+        return result.affectedRows > 0 ? Promise.resolve('更新成功') : Promise.reject('更新失败');
     }
 
     /**
