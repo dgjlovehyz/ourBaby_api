@@ -120,13 +120,14 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // Precision: '119.385040',
     // MsgId: '5837397520665436492' }
     console.log('event message:', message)
-    if (message.Event === 'CLICK') {
+    if (message.Event == 'CLICK') {
         //点击按钮事件
 
-    } else if (message.Event === 'subscribe') {
+    } else if (message.Event == 'subscribe') {
         //关注公众号
+        console.log('关注公众号')
         res.reply(await wxEventCtr.userSubscribe(message))
-    } else if (message.Event === 'unsubscribe') {
+    } else if (message.Event == 'unsubscribe') {
         //取消关注
         res.reply(await wxEventCtr.userUnsubscribe(message))
     } else {
