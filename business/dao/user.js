@@ -41,7 +41,7 @@ class dao {
         let sql = `UPDATE user_main SET ? WHERE open_id = ?`,
             obj = { open_id: params.FromUserName },
             sqlParam = []
-        if (!!params.status)
+        if (params.status != undefined)
             obj.status = params.status
         sqlParam.push(obj)
         sqlParam.push(params.FromUserName)
