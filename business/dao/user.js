@@ -1,7 +1,7 @@
 'use strict'
 
 const user_prefix = `
-        id,
+        user_id,
         open_id openId,
         \`status\` ,
         DATE_FORMAT(creat_time,'%Y-%m-%d %T') as creatTime,
@@ -56,10 +56,10 @@ class dao {
      */
     static async getUser(connection, param) {
         let sql = () => `SELECT ${user_prefix} FROM user_main ${where.join(' ')} LIMIT 1`,
-            where = [`where 1=1 AND open_id = ${param.FromUserName}`]
+            where = [`where 1=1 AND open_id = '${param.FromUserName}'`]
         if (param.status)
-            where.push(`AND \`status\` = ${param.status}`)
-        return (await dao.exec(connection, sql, []))[0]
+            where.push(`AND \`status\` = '${param.status}'`)
+        return (await dao.exec(connection, sql(), []))[0]
     }
 
 }
