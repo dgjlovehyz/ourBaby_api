@@ -18,6 +18,7 @@
   "homepage": "https://github.com/dgjlovehyz/ourBaby_api#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
     "express": "^4.16.4",

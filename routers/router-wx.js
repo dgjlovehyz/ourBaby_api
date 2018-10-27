@@ -3,8 +3,9 @@
 const router = require('express').Router();
 const wxCtr = require('../business/controllers/wx');
 const wechat = require('wechat');
-const wxConfig = require('../config/system-config').wechat.config
-const Exception = require('../framework/exception/exception')
+const wxConfig = require('../config/system-config').wechat.config;
+const Exception = require('../framework/exception/exception');
+const wxEventCtr = require('../business/controllers/wx_event');
 
 
 router.get('/wx/msg', async (req, res, next) => {
@@ -119,6 +120,21 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(function (message, req, res,
     // Precision: '119.385040',
     // MsgId: '5837397520665436492' }
     console.log('event message:', message)
+    if (message.Event === 'CLICK') {
+        //点击按钮事件
+
+    } else if (message.Event === 'subscribe') {
+        //关注公众号
+        res.reply(await wxEventCtr.userSubscribe(message))
+    } else if (message.Event === 'unsubscribe') {
+        //取消关注
+
+    } else {
+        res.reply({
+            content: '没有该功能，反正也用不上，哈哈哈！',
+            type: 'text'
+        });
+    }
 }).device_text(function (message, req, res, next) {
     // message为设备文本消息内容
     // { ToUserName: 'gh_d3e07d51b513',

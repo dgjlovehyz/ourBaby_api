@@ -16,7 +16,6 @@ function getToken() {
 }
 
 
-
 module.exports = function () {
     getToken()
 }
