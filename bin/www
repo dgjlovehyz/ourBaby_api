@@ -2,7 +2,6 @@ const wechat = require('wechat');
 const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
-const connect = require('connect');
 
 const app = express();
 

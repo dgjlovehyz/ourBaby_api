@@ -5,8 +5,7 @@ const
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    middlewares = require('express-middlewares-js'),
-    connect = require('connect');
+    middlewares = require('express-middlewares-js');
 
 const
     createExpressApp = option => {
@@ -34,8 +33,6 @@ const
         app.use(express.query())
         app.use(bodyParser.json())
         app.use(bodyParser.urlencoded({ extended: false }))
-        app.use(connect.cookieParser());
-        app.use(connect.session({ secret: 'keyboard cat', cookie: { maxAge: 60000 } }));
 
         //跨域
         app.all('*', require('./routers/router-cross-domain'));
