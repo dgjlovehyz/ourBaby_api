@@ -11,11 +11,14 @@ class biz {
 
         return dao.manageTransactionConnection(async (connection) => {
             let result = await userDao.getUser(connection, { FromUserName: params.FromUserName })
+            console.log('result', result)
             if (!!result && !!result.openId) {
                 //用户已存在
+                console.log('update')
                 await userDao.updateUser(connection, { FromUserName: params.FromUserName, status: 0 })
             } else {
                 //用户不存在
+                console.log('insert')
                 await userDao.insertUser(connection, params)
             }
             return {
