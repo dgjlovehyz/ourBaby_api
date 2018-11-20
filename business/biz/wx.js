@@ -41,13 +41,14 @@ class biz {
      */
     static async textHandle(params) {
 
-        let key = 'openid:' + params.FromUserName
-        console.log(await redis.get(key))
-        let value = JSON.parse(await redis.get(key)),
+        let key = 'openid:' + params.FromUserName,
+            value = await redis.get(key),
             returnMsg = {
                 content: '',
                 type: ''
             }
+        if (_.isString(value))
+            value = JSON.parse(value)
         if (!value) {
             value = { openId: params.FromUserName }
         }
