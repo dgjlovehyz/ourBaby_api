@@ -2,7 +2,8 @@
 
 const dao = require('../../framework/util/dao');
 const userDao = require('../dao/user');
-const redis = require('../../framework/util/redis_client').redis;
+const redisConfig = require('../../config/system-config').redis;
+const redis = require('../../framework/util/redis_client').redis(redisConfig);
 
 class biz {
     /**

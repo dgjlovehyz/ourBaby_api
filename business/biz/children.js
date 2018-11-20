@@ -1,6 +1,7 @@
 'use strict'
 
-const redis = require('../../framework/util/redis_client').redis;
+const redisConfig = require('../../config/system-config').redis;
+const redis = require('../../framework/util/redis_client').redis(redisConfig);
 const _ = require('underscore');
 const uuid = require('uuid');
 const moment = require('moment');
