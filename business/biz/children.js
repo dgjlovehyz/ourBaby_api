@@ -50,7 +50,7 @@ class biz {
         })
 
 
-    } s
+    } 
 }
 
 module.exports = biz
