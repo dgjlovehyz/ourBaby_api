@@ -96,6 +96,7 @@ class biz {
             }
         }
 
+        await redis.set(key, value, 300)
         return returnMsg;
     }
 
