@@ -40,8 +40,10 @@ class biz {
      * @param {*} params 
      */
     static async textHandle(params) {
-        let key = 'openid:' + params.FromUserName,
-            value = JSON.parse(await redis.get(key)),
+
+        let key = 'openid:' + params.FromUserName
+        console.log(await redis.get(key))
+        let value = JSON.parse(await redis.get(key)),
             returnMsg = {
                 content: '',
                 type: ''
