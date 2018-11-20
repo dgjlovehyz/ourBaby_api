@@ -2,7 +2,8 @@
 
 const wxConfig = require('../../config/system-config').wechat.config;
 const crypto = require('crypto');
-const redis = require('../../framework/util/redis_client').redis;
+const redisConfig = require('../../config/system-config').redis;
+const redis = require('../../framework/util/redis_client').redis(redisConfig);
 
 class biz {
     /**
