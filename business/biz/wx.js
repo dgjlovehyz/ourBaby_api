@@ -51,6 +51,7 @@ class biz {
         }
         value.content = params.content
         if (!!value.biz && !!value.function) {
+            console.log('redis:', value)
             let returnMsg = await require(value.biz)[value.function](value)
             redis.set(key, returnMsg, 300)
             return {
@@ -64,6 +65,7 @@ class biz {
             }
         }
     }
+
 }
 
 module.exports = biz;
