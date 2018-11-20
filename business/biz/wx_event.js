@@ -66,6 +66,7 @@ class biz {
             value.biz = './children'
             value.function = 'addName'
             returnMsg.content = '请根据提示添加宝贝信息！请输入宝贝名称:'
+            returnMsg.type = 'text'
         } else if (params.EventKey == 'baby_relation') {
             //关联宝宝
 
