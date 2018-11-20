@@ -116,7 +116,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     console.log('event message:', message)
     if (message.Event == 'CLICK') {
         //点击按钮事件
-        res.reply(await wxCtr.textHandle(message))
+        res.reply(await wxEventCtr.clickEvent(message))
     } else if (message.Event == 'subscribe') {
         //关注公众号
         console.log('关注公众号')
