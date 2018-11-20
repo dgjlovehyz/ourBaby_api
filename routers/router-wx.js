@@ -6,7 +6,6 @@ const wechat = require('wechat');
 const wxConfig = require('../config/system-config').wechat.config;
 const Exception = require('../framework/exception/exception');
 const wxEventCtr = require('../business/controllers/wx_event');
-const wxHandle = require('../business/biz/wx')
 
 
 router.get('/wx/msg', async (req, res, next) => {
@@ -117,7 +116,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     console.log('event message:', message)
     if (message.Event == 'CLICK') {
         //点击按钮事件
-
+        res.reply(await wxCtr.textHandle(message))
     } else if (message.Event == 'subscribe') {
         //关注公众号
         console.log('关注公众号')
