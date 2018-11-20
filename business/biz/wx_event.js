@@ -2,6 +2,7 @@
 
 const dao = require('../../framework/util/dao');
 const userDao = require('../dao/user');
+const redis = require('../../framework/util/redis_client').redis;
 
 class biz {
     /**
@@ -40,6 +41,60 @@ class biz {
                 type: 'text'
             }
         })
+    }
+
+    /**
+     * 点击按钮事件，这里会细分每个按钮的功能
+     * 
+     * @param {*} params 
+     */
+    static async clickEvent(params) {
+        let key = 'openid:' + params.FromUserName,
+            value = JSON.parse(redis.get(key)),
+            returnMsg = {
+                content: '',
+                type: ''
+            }
+        if (!value) {
+            value = { openId: params.FromUserName }
+        }
+
+
+        if (params.EventKey == 'baby_add') {
+            //新增宝宝
+            value.biz = './children'
+            value.function = 'addName'
+            returnMsg.content = '请根据提示添加宝贝信息！请输入宝贝名称:'
+        } else if (params.EventKey == 'baby_relation') {
+            //关联宝宝
+
+        } else if (params.EventKey == 'baby_search') {
+            //查询
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else if (params.EventKey == '') {
+
+        } else {
+            return {
+                content: '没有这个操作!',
+                type: 'text'
+            }
+        }
+
+        return returnMsg;
     }
 
 }

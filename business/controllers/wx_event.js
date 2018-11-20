@@ -7,6 +7,9 @@ class ctr {
     static async userUnsubscribe(params) {
         return await wxEBiz.userUnsubscribe(params);
     }
+    static async clickEvent(params) {
+        return await wxEBiz.clickEvent(params);
+    }
 }
 
 module.exports = ctr;

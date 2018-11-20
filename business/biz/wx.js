@@ -1,7 +1,8 @@
 'use strict'
 
 const wxConfig = require('../../config/system-config').wechat.config;
-const crypto = require('crypto')
+const crypto = require('crypto');
+const redis = require('../../framework/util/redis_client').redis;
 
 class biz {
     /**
@@ -26,10 +27,41 @@ class biz {
         console.log("signature:" + params.signature)
         console.log("_signature:" + _signature)
         console.log("echostr:" + params.echostr)
-        
+
         if (_signature == params.signature)
             return params.echostr
         return '验证失败'
+    }
+
+    /**
+     *  处理来自普通消息的内容
+     * 
+     * @param {*} params 
+     */
+    static async textHandle(params) {
+        let key = 'openid:' + params.FromUserName,
+            value = JSON.parse(redis.get(key)),
+            returnMsg = {
+                content: '',
+                type: ''
+            }
+        if (!value) {
+            value = { openId: params.FromUserName }
+        }
+        value.content = params.content
+        if (!!value.biz && !!value.function) {
+            let returnMsg = await require(value.biz)[value.function](value)
+            redis.set(key, returnMsg, 300)
+            return {
+                content: returnMsg,
+                type: 'text'
+            }
+        } else {
+            return {
+                content: '不知道你想要什么╮(╯▽╰)╭',
+                type: 'text'
+            }
+        }
     }
 }
 

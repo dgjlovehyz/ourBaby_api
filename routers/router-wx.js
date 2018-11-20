@@ -6,6 +6,7 @@ const wechat = require('wechat');
 const wxConfig = require('../config/system-config').wechat.config;
 const Exception = require('../framework/exception/exception');
 const wxEventCtr = require('../business/controllers/wx_event');
+const wxHandle = require('../business/biz/wx')
 
 
 router.get('/wx/msg', async (req, res, next) => {
@@ -29,14 +30,15 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
 
     console.log('text message:', message)
     // 回复高富帅(图文回复)
-    res.reply([
-        {
-            title: '麻麻别生气了',
-            description: '粑粑就是个坏蛋，我们不和他生气',
-            picurl: 'http://mmbiz.qpic.cn/mmbiz_jpg/I9E8zzcgdPSgLOJkQxAqFxuhl6ibvdWScYpChm4cJBLTezFl7E2sViaOaBso2wL0TFTdW1XPVwFgkxPiczlleVOEA/0',
-            url: ''
-        }
-    ]);
+    // res.reply([
+    //     {
+    //         title: '麻麻别生气了',
+    //         description: '粑粑就是个坏蛋，我们不和他生气',
+    //         picurl: 'http://mmbiz.qpic.cn/mmbiz_jpg/I9E8zzcgdPSgLOJkQxAqFxuhl6ibvdWScYpChm4cJBLTezFl7E2sViaOaBso2wL0TFTdW1XPVwFgkxPiczlleVOEA/0',
+    //         url: ''
+    //     }
+    // ]);
+    wxHandle.textHandle(message)
 }).image(async function (message, req, res, next) {
     // message为图片内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -47,14 +49,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // MediaId: 'media_id',
     // MsgId: '5837397301622104395' }
     console.log('image message:', message)
-    res.reply([
-        {
-            title: '麻麻别生气了',
-            description: '粑粑就是个坏蛋，我们不和他生气',
-            picurl: message.PicUrl,
-            url: ''
-        }
-    ]);
+
 }).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',
