@@ -51,7 +51,7 @@ class biz {
      */
     static async clickEvent(params) {
         let key = 'openid:' + params.FromUserName,
-            value = JSON.parse(redis.get(key)),
+            value = JSON.parse(await redis.get(key)),
             returnMsg = {
                 content: '',
                 type: ''
