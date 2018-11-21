@@ -4,6 +4,7 @@ const wxConfig = require('../../config/system-config').wechat.config;
 const crypto = require('crypto');
 const redisConfig = require('../../config/system-config').redis;
 const redis = require('../../framework/util/redis_client').redis(redisConfig);
+const _ = require('underscore');
 
 class biz {
     /**
@@ -58,7 +59,7 @@ class biz {
             let returnMsg = await require(value.biz)[value.function](value)
             redis.set(key, returnMsg, 300)
             return {
-                content: returnMsg,
+                content: returnMsg.msg,
                 type: 'text'
             }
         } else {
