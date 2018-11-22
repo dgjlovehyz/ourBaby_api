@@ -1,7 +1,7 @@
 'use strict'
 
 const user_prefix = `
-        user_id,
+        user_id userId,
         open_id openId,
         \`status\` ,
         DATE_FORMAT(creat_time,'%Y-%m-%d %T') as creatTime,

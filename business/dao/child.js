@@ -61,6 +61,19 @@ class dao {
             where.push(`AND \`status\` = '${param.status}'`)
         return (await dao.exec(connection, sql(), []))[0]
     }
+
+    static async insertUnion(connection, params) {
+        let sql = `INSERT INTO user_child_relation SET ?`,
+            obj = {
+                user_id: params.userId,
+                child_id: params.childId,
+                user_relation: params.userRelation,
+                child_relation: params.childRelation,
+            }
+
+        let result = await dao.exec(connection, sql, obj);
+        return result.affectedRows > 0 ? result.insertId : Promise.reject('新增失败');
+    }
 }
 
 module.exports = dao;
