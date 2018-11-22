@@ -51,15 +51,16 @@ class biz {
      */
     static async clickEvent(params) {
         let key = 'openid:' + params.FromUserName,
-            value = JSON.parse(await redis.get(key)),
+            value = await redis.get(key),
             returnMsg = {
                 content: '',
                 type: ''
             }
+        if (_.isString(value))
+            value = JSON.parse(value)
         if (!value) {
             value = { openId: params.FromUserName }
         }
-
 
         if (params.EventKey == 'baby_add') {
             //新增宝宝
