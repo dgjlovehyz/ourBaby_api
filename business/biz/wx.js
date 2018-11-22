@@ -56,9 +56,9 @@ class biz {
         value.content = params.content
         if (!!value.biz && !!value.function) {
             console.log('redis:', value)
-            let returnMsg = await require(value.biz)[value.function](value)
-            redis.set(key, returnMsg, 300)
-            returnMsg.content = returnMsg.msg
+            let ret = await require(value.biz)[value.function](value)
+            redis.set(key, ret, 300)
+            returnMsg.content = ret.msg
             returnMsg.type = 'text'
         } else {
             returnMsg.content = '不知道你想要什么╮(╯▽╰)╭'
