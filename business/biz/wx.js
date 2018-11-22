@@ -58,16 +58,14 @@ class biz {
             console.log('redis:', value)
             let returnMsg = await require(value.biz)[value.function](value)
             redis.set(key, returnMsg, 300)
-            return {
-                content: returnMsg.msg,
-                type: 'text'
-            }
+            returnMsg.content = returnMsg.msg
+            returnMsg.type = 'text'
         } else {
-            return {
-                content: '不知道你想要什么╮(╯▽╰)╭',
-                type: 'text'
-            }
+            returnMsg.content = '不知道你想要什么╮(╯▽╰)╭'
+            returnMsg.type = 'text'
         }
+
+        return returnMsg
     }
 
 }
