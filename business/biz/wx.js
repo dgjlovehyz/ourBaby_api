@@ -53,7 +53,7 @@ class biz {
         if (!value) {
             value = { openId: params.FromUserName }
         }
-        value.content = params.content
+        value.content = params.Content
         if (!!value.biz && !!value.function) {
             console.log('redis:', value)
             let ret = await require(value.biz)[value.function](value)

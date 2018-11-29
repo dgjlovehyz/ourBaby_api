@@ -12,8 +12,10 @@ const dao = require('../../framework/util/dao');
 class biz {
 
     static async addName(params) {
-        if (!params.content)
-            return params.msg = '请重新输入'
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
         if (!params.data)
             params.data = {}
         params.data.name = params.content;
@@ -23,8 +25,10 @@ class biz {
     }
 
     static async addSex(params) {
-        if (!params.content)
-            return params.msg = '请重新输入'
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
         if (!params.data)
             params.data = {}
         params.data.sex = _.isNumber(params.content) ? params.content : params.content == '男' ? 1 : 2;
@@ -34,8 +38,10 @@ class biz {
     }
 
     static async addBirthData(params) {
-        if (!params.content)
-            return params.msg = '请重新输入'
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
         if (!params.data)
             params.data = {}
         let birthTime
@@ -53,8 +59,10 @@ class biz {
     }
 
     static async addUserRelation(params) {
-        if (!params.content)
-            return params.msg = '请重新输入'
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
         if (!params.data)
             params.data = {}
         params.data.userRelation = params.content;
@@ -64,8 +72,10 @@ class biz {
     }
 
     static async addChildRelation(params) {
-        if (!params.content)
-            return params.msg = '请重新输入'
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
         if (!params.data)
             params.data = {}
         params.data.childRelation = params.content;
