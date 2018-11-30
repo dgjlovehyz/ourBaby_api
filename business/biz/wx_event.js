@@ -71,7 +71,10 @@ class biz {
             returnMsg.type = 'text'
         } else if (params.EventKey == 'baby_relation') {
             //关联宝宝
-
+            value.biz = './children'
+            value.function = 'bindChild'
+            returnMsg.content = '请根据提示添加宝贝！请输入宝贝编号:'
+            returnMsg.type = 'text'
         } else if (params.EventKey == 'baby_search') {
             //查询
 

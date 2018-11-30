@@ -32,7 +32,7 @@ class biz {
         if (!params.data)
             params.data = {}
         params.data.sex = _.isNumber(params.content) ? params.content : params.content == '男' ? 1 : 2;
-        params.msg = '请输入宝宝出生日日\n栗子：2018-01-31 09:'
+        params.msg = '请输入宝宝出生日日\n栗子：2018-01-31 09:18'
         params.function = 'addBirthData'
         return params
     }
@@ -81,15 +81,36 @@ class biz {
         params.data.childRelation = params.content;
 
         return await dao.manageTransactionConnection(async (connection) => {
-            params.data.uuid = uuid.v1();
-            let id = await childDao.insertClild(connection, params.data);
-            let user = await userDao.getUser(connection, { FromUserName: params.openId })
-            await childDao.insertUnion(connection, { userId: user.userId, childId: id, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
-            params.msg = '宝宝添加成功'
+            if (!!params.data.uuid) {
+                //有uuid，说明是绑定宝贝
+                let user = await userDao.getUser(connection, { FromUserName: params.openId })
+                let child = await childDao.getChild(connection, { uuid: params.uuid })
+                await childDao.insertUnion(connection, { userId: user.userId, childId: child.childId, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
+                params.msg = '宝宝绑定成功'
+            } else {
+                //没有uuid，说明是新增宝贝
+                params.data.uuid = uuid.v1();
+                let id = await childDao.insertClild(connection, params.data);
+                let user = await userDao.getUser(connection, { FromUserName: params.openId })
+                await childDao.insertUnion(connection, { userId: user.userId, childId: id, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
+                params.msg = '宝宝添加成功'
+            }
             delete params.function
             delete params.biz
             return params
         })
+    }
+
+    static async bindChild(params) {
+        if (!params.content) {
+            params.msg = '请重新输入'
+            return params
+        }
+        if (!params.data)
+            params.data = {}
+        params.data.uuid = params.content;
+        params.msg = '请输入你是宝宝的什么关系\n栗子：爸爸、妈妈'
+        params.function = 'addUserRelation'
     }
 }
 
