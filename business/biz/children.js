@@ -84,7 +84,7 @@ class biz {
             if (!!params.data.uuid) {
                 //有uuid，说明是绑定宝贝
                 let user = await userDao.getUser(connection, { FromUserName: params.openId })
-                let child = await childDao.getChild(connection, { uuid: params.uuid })
+                let child = await childDao.getChild(connection, { uuid: params.data.uuid })
                 await childDao.insertUnion(connection, { userId: user.userId, childId: child.childId, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
                 params.msg = '宝宝绑定成功'
             } else {
@@ -111,6 +111,7 @@ class biz {
         params.data.uuid = params.content;
         params.msg = '请输入你是宝宝的什么关系\n栗子：爸爸、妈妈'
         params.function = 'addUserRelation'
+        // return params
     }
 }
 

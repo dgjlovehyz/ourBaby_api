@@ -57,7 +57,7 @@ class biz {
                 content: '',
                 type: ''
             }
-        if (_.isString(value))
+        if (_.isString(value) && value.length > 0)
             value = JSON.parse(value)
         if (!value) {
             value = { openId: params.FromUserName }

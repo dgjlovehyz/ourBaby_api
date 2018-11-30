@@ -56,13 +56,13 @@ class dao {
 
     static async getChild(connection, params) {
         let sql = () => `SELECT ${child_prefix} FROM child_main ${where.join(' ')} LIMIT 1`,
-            where = [`where 1=1'`]
+            where = [`where 1=1 `]
         if (!!params.childId)
             where.push(`AND child_id = ${params.childId}`)
         if (!!params.uuid)
             where.push(`AND uuid = '${params.uuid}'`)
-        if (!!param.status)
-            where.push(`AND \`status\` = '${param.status}'`)
+        if (!!params.status)
+            where.push(`AND \`status\` = '${params.status}'`)
         return (await dao.exec(connection, sql(), []))[0]
     }
 

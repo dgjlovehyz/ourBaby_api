@@ -37,7 +37,12 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     //         url: ''
     //     }
     // ]);
-    res.reply(await wxCtr.textHandle(message))
+    try {
+        res.reply(await wxCtr.textHandle(message))
+    } catch (error) {
+        console.error(error)
+        res.reply('系统报错了，别问他我为什么，我也不知道_(´ཀ`」 ∠)_')
+    }
 }).image(async function (message, req, res, next) {
     // message为图片内容
     // { ToUserName: 'gh_d3e07d51b513',
