@@ -111,7 +111,7 @@ class biz {
         params.data.uuid = params.content;
         params.msg = '请输入你是宝宝的什么关系\n栗子：爸爸、妈妈'
         params.function = 'addUserRelation'
-        // return params
+        return params
     }
 }
 
