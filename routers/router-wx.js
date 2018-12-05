@@ -53,7 +53,15 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // MediaId: 'media_id',
     // MsgId: '5837397301622104395' }
     console.log('image message:', message)
-
+    // http://0.wap.pre.kma.biaoxiaoxu.cn/static/games/luckRotateBlock_2/index.html
+    res.reply([
+            {
+                title: '麻麻别生气了',
+                description: '粑粑就是个坏蛋，我们不和他生气',
+                picurl: message.PicUrl,
+                url: 'http://0.wap.pre.kma.biaoxiaoxu.cn/static/games/luckRotateBlock_2/index.html'
+            }
+        ]);
 }).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',

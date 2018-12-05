@@ -1,9 +1,10 @@
 'use starict'
 
 const dao = require('../../framework/util/dao');
-const userDao = require('../dao/user');
 const redisConfig = require('../../config/system-config').redis;
 const redis = require('../../framework/util/redis_client').redis(redisConfig);
+const userDao = require('../dao/user');
+const children = require('./children');
 const _ = require('underscore');
 
 class biz {
@@ -13,15 +14,16 @@ class biz {
     static async userSubscribe(params) {
         console.log('biz')
         return dao.manageTransactionConnection(async (connection) => {
-            let result = await userDao.getUser(connection, { FromUserName: params.FromUserName })
+            let result = await userDao.getUser(connection, { openId: params.FromUserName })
             console.log('result', result)
             if (!!result && !!result.openId) {
                 //用户已存在
                 console.log('update')
-                await userDao.updateUser(connection, { FromUserName: params.FromUserName, status: 0 })
+                await userDao.updateUser(connection, { openId: params.FromUserName, status: 0 })
             } else {
                 //用户不存在
                 console.log('insert')
+                params.openId = params.FromUserName
                 await userDao.insertUser(connection, params)
             }
             return {
@@ -77,7 +79,12 @@ class biz {
             returnMsg.type = 'text'
         } else if (params.EventKey == 'baby_search') {
             //查询
-
+            let retMsg = await children.searchChildren({ openId: params.FromUserName });
+            value.biz = retMsg.biz
+            value.function = retMsg.function
+            value.data = retMsg.data
+            returnMsg.content = retMsg.msg
+            returnMsg.type = retMsg.type
         } else if (params.EventKey == '') {
 
         } else if (params.EventKey == '') {

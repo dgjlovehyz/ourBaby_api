@@ -1,14 +1,14 @@
 'use strict'
 
 const child_prefix = `
-        child_id childId,
-        uuid ,
-        name ,
-        sex ,
-        DATE_FORMAT(birth_time,'%Y-%m-%d %T') as birthTime,
-        \`status\` ,
-        DATE_FORMAT(creat_time,'%Y-%m-%d %T') as creatTime,
-        is_delete isDelete
+        cm.child_id childId,
+        cm.uuid ,
+        cm.name ,
+        cm.sex ,
+        DATE_FORMAT(cm.birth_time,'%Y-%m-%d %T') as birthTime,
+        cm.\`status\` ,
+        DATE_FORMAT(cm.creat_time,'%Y-%m-%d %T') as creatTime,
+        cm.is_delete isDelete
         `
 class dao {
     static async exec(connection, sql, params) {
@@ -55,14 +55,14 @@ class dao {
     }
 
     static async getChild(connection, params) {
-        let sql = () => `SELECT ${child_prefix} FROM child_main ${where.join(' ')} LIMIT 1`,
+        let sql = () => `SELECT ${child_prefix} FROM child_main cm ${where.join(' ')} LIMIT 1`,
             where = [`where 1=1 `]
         if (!!params.childId)
-            where.push(`AND child_id = ${params.childId}`)
+            where.push(`AND cm.child_id = ${params.childId}`)
         if (!!params.uuid)
-            where.push(`AND uuid = '${params.uuid}'`)
+            where.push(`AND cm.uuid = '${params.uuid}'`)
         if (!!params.status)
-            where.push(`AND \`status\` = '${params.status}'`)
+            where.push(`AND cm.\`status\` = '${params.status}'`)
         return (await dao.exec(connection, sql(), []))[0]
     }
 
@@ -77,6 +77,22 @@ class dao {
 
         let result = await dao.exec(connection, sql, obj);
         return result.affectedRows > 0 ? result.insertId : Promise.reject('新增失败');
+    }
+
+    static async selectChildByOpenid(connection, params) {
+        let sql = () => `SELECT ${child_prefix},
+            ucr.child_relation childRelation
+        FROM
+            child_main cm
+        LEFT JOIN user_child_relation ucr ON ucr.child_id = cm.child_id
+        LEFT JOIN user_main um ON um.user_id = ucr.user_id
+        ${where.join(' ')}
+        ORDER BY cm.birth_time asc `,
+            where = [`WHERE 1=1`]
+        if (!!params.openId)
+            where.push(`AND um.open_id = '${params.openId}'`)
+
+        return await dao.exec(connection, sql(), [])
     }
 }
 
