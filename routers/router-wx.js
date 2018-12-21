@@ -56,10 +56,10 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // http://0.wap.pre.kma.biaoxiaoxu.cn/static/games/luckRotateBlock_2/index.html
     res.reply([
             {
-                title: '麻麻别生气了',
-                description: '粑粑就是个坏蛋，我们不和他生气',
+                title: '我不知道测试两个字能不能通过╮(╯▽╰)╭',
+                description: '我也不知道为什么',
                 picurl: message.PicUrl,
-                url: 'http://0.wap.pre.kma.biaoxiaoxu.cn/static/games/luckRotateBlock_2/index.html'
+                url: 'http://121.196.212.213/15023/index.html'
             }
         ]);
 }).voice(async function (message, req, res, next) {
