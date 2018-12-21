@@ -94,6 +94,24 @@ class dao {
 
         return await dao.exec(connection, sql(), [])
     }
+
+    static async getChildANDRelation(connection, params) {
+        let sql = () => `SELECT ${child_prefix},
+            ucr.child_relation childRelation 
+        FROM 
+            child_main cm 
+        LEFT JOIN user_child_relation ucr ON ucr.child_id = cm.child_id 
+        LEFT JOIN user_main um ON um.user_id = ucr.user_id and um.open_id = '${params.openId}'
+        ${where.join(' ')} LIMIT 1`,
+            where = [`where 1=1 `]
+        if (!!params.childId)
+            where.push(`AND cm.child_id = ${params.childId}`)
+        if (!!params.uuid)
+            where.push(`AND cm.uuid = '${params.uuid}'`)
+        if (!!params.status)
+            where.push(`AND cm.\`status\` = '${params.status}'`)
+        return (await dao.exec(connection, sql(), []))[0]
+    }
 }
 
 module.exports = dao;

@@ -30,6 +30,7 @@ const
             }
             return next();
         });
+        app.use(express.static('public'))
         app.use(express.query())
         app.use(bodyParser.json())
         app.use(bodyParser.urlencoded({ extended: false }))

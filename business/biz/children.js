@@ -151,11 +151,26 @@ class biz {
         let retMsg = {}
         let childId = params.data['child' + params.content]
         return await dao.manageConnection(async (connection) => {
-            let child = await childDao.getChild(connection, { childId: childId })
-            retMsg.msg = child.name + 'hahahah'
+            let child = await childDao.getChildANDRelation(connection, { childId: childId, openId: params.openId })
+            retMsg.msg = child.childRelation + ':' + child.name + '\n1、查询宝贝的编号\n2、查询宝贝今天的消息\n3、上传宝贝今日状态'
             retMsg.type = 'text'
+            retMsg.function = 'babySearchChoise'
             return retMsg
         })
+    }
+
+
+    static async babySearchChoise(params) {
+        let retMsg = {}
+        if (params.content == 1) {
+            //查询编号
+        } else if (params.content == 2) {
+            //查询今日消息
+        } else if (params.content == 3) {
+            //上传今日状态
+        } else {
+            retMsg.msg = '没有这个选择哦！请重新选一个'
+        }
     }
 
 
