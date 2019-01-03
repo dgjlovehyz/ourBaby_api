@@ -54,14 +54,21 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // MsgId: '5837397301622104395' }
     console.log('image message:', message)
     // http://0.wap.pre.kma.biaoxiaoxu.cn/static/games/luckRotateBlock_2/index.html
-    res.reply([
-            {
-                title: '我不知道测试两个字能不能通过╮(╯▽╰)╭',
-                description: '我也不知道为什么',
-                picurl: message.PicUrl,
-                url: 'http://121.196.212.213/15023/index.html'
-            }
-        ]);
+    // res.reply([
+    //         {
+    //             title: '我不知道测试两个字能不能通过╮(╯▽╰)╭',
+    //             description: '我也不知道为什么',
+    //             picurl: message.PicUrl,
+    //             url: 'http://121.196.212.213/15023/index.html'
+    //         }
+    //     ]);
+
+    res.reply({
+        type: "image",
+        content: {
+            mediaId: '9Jq0DLU5kdSzRies2N5MfSCyRRC_QFaSa5c5Mnkkme4'
+        }
+    })
 }).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',
