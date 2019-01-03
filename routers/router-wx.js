@@ -63,12 +63,9 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     //         }
     //     ]);
 
-    res.reply({
-        type: "news",
-        content: {
-            mediaId: '9Jq0DLU5kdSzRies2N5MfSCyRRC_QFaSa5c5Mnkkme4'
-        }
-    })
+    res.reply([
+        {mediaId: '9Jq0DLU5kdSzRies2N5MfSCyRRC_QFaSa5c5Mnkkme4'}
+    ])
 }).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',
