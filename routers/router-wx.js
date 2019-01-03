@@ -64,7 +64,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     //     ]);
 
     res.reply({
-        type: "image",
+        type: "news",
         content: {
             mediaId: '9Jq0DLU5kdSzRies2N5MfSCyRRC_QFaSa5c5Mnkkme4'
         }
