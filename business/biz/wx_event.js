@@ -65,47 +65,77 @@ class biz {
             value = { openId: params.FromUserName }
         }
 
-        if (params.EventKey == 'baby_add') {
-            //新增宝宝
-            value.biz = './children'
-            value.function = 'addName'
-            returnMsg.content = '请根据提示添加宝贝信息！请输入宝贝名称:'
-            returnMsg.type = 'text'
-        } else if (params.EventKey == 'baby_relation') {
-            //关联宝宝
-            value.biz = './children'
-            value.function = 'bindChild'
-            returnMsg.content = '请根据提示添加宝贝！请输入宝贝编号:'
-            returnMsg.type = 'text'
-        } else if (params.EventKey == 'baby_search') {
-            //查询
-            let retMsg = await children.searchChildren({ openId: params.FromUserName });
-            value.biz = retMsg.biz
-            value.function = retMsg.function
-            value.data = retMsg.data
-            returnMsg.content = retMsg.msg
-            returnMsg.type = retMsg.type
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else if (params.EventKey == '') {
-
-        } else {
-            return {
-                content: '没有这个操作!',
-                type: 'text'
-            }
+        switch (params.EventKey) {
+            case 'baby_add':
+                //新增宝宝
+                value.biz = './children'
+                value.function = 'addName'
+                returnMsg.content = '请根据提示添加宝贝信息！请输入宝贝名称:'
+                returnMsg.type = 'text'
+                break;
+            case 'baby_search':
+                //查询
+                let retMsg = await children.searchChildren({ openId: params.FromUserName });
+                value.biz = retMsg.biz
+                value.function = retMsg.function
+                value.data = retMsg.data
+                returnMsg.content = retMsg.msg
+                returnMsg.type = retMsg.type
+                break;
+            case 'baby_relation':
+                value.biz = './children'
+                value.function = 'bindChild'
+                returnMsg.content = '请根据提示添加宝贝！请输入宝贝编号:'
+                returnMsg.type = 'text'
+                break;
+            case 'baby_empty':
+                return {
+                    content: '还没有绑定宝贝哦，赶快创建或关联一个宝贝吧!',
+                    type: 'text'
+                }
+                break;
+            case 'help_baby_uuid':
+                return {
+                    content: '在查询宝贝里可以查询某个宝贝的编号，发送给好友可以就可以关联宝贝了哦',
+                    type: 'text'
+                }
+                break;
+            case 'help_day_explain':
+                return {
+                    content: '每日状态，只有某一个宝贝关联者上传了今日状态以后才会有哦！',
+                    type: 'text'
+                }
+                break;
+            case 'V1001_GOOD':
+                return {
+                    content: '感谢你的支持，其实这个按钮没什么用！[Smirk]',
+                    type: 'text'
+                }
+                break;
+            case 'baby_one':
+                //查询第一个宝贝
+                break;
+            case 'baby_two':
+                //查询第二个宝贝
+                break;
+            case 'baby_three':
+                //查询第三个宝贝
+                break;
+            case 'baby_four':
+                //查询第四个宝贝
+                break;
+            case 'baby_five':
+                //查询第五个宝贝
+                break;
+            case 'baby_more':
+                //查询更多宝贝
+                break;
+            default:
+                return {
+                    content: '没有这个操作!',
+                    type: 'text'
+                }
+                break;
         }
 
         await redis.set(key, value, 300)

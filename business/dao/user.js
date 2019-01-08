@@ -6,6 +6,11 @@ const user_prefix = `
         \`status\` ,
         DATE_FORMAT(creat_time,'%Y-%m-%d %T') as creatTime,
         is_delete isDelete
+        `,
+    user_menu_prefix = `
+        user_id userId,
+        menu_id menuId,
+        json_string jsonString
         `
 class dao {
     static async exec(connection, sql, params) {
@@ -62,6 +67,16 @@ class dao {
         return (await dao.exec(connection, sql(), []))[0]
     }
 
+
+    static async getUserMenu(connection, params) {
+        let sql = `SELECT ${user_menu_prefix} FROM user_menu where user_id = ?`
+        return (await dao.exec(connection, sql, [params.userId]))[0]
+    }
+
+    static async insertOrUpdateMenu(connection, params) {
+        let sql = `INSERT INTO user_menu (\`user_id\` , \`menu_id\` , \`json_string\`) VALUES (?,?,?) ON DUPLICATE KEY UPDATE menu_id = values(menu_id), json_string = values(json_string)`
+        return await dao.exec(connection, sql, [params.userId, params.menuId, params.jsonString])
+    }
 }
 
 module.exports = dao;

@@ -8,9 +8,15 @@ const moment = require('moment');
 const childDao = require('../dao/child');
 const userDao = require('../dao/user');
 const dao = require('../../framework/util/dao');
+const wxApi = require('../../util/wx_api');
+const getTagByNum = require('../../constant/wx_menu').getTagByNum;
+const menuBase = require('../../constant/wx_menu').conditionalMenu;
 
 class biz {
-
+    /**
+     * 宝贝新增部分，添加名称
+     * @param {*} params 
+     */
     static async addName(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -24,6 +30,10 @@ class biz {
         return params
     }
 
+    /**
+     * 宝贝新增部分，添加性别
+     * @param {*} params 
+     */
     static async addSex(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -37,6 +47,10 @@ class biz {
         return params
     }
 
+    /**
+     * 宝贝新增部分，添加出生日期
+     * @param {*} params 
+     */
     static async addBirthData(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -58,6 +72,10 @@ class biz {
         return params
     }
 
+    /**
+     * 添加用户和宝贝的关系
+     * @param {*} params 
+     */
     static async addUserRelation(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -70,7 +88,10 @@ class biz {
         params.function = 'addChildRelation'
         return params
     }
-
+    /**
+     * 添加用户和宝贝的关系，并且完成宝贝的添加和关联关系
+     * @param {*} params 
+     */
     static async addChildRelation(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -81,9 +102,9 @@ class biz {
         params.data.childRelation = params.content;
 
         return await dao.manageTransactionConnection(async (connection) => {
+            let user = await userDao.getUser(connection, { openId: params.openId })
             if (!!params.data.uuid) {
                 //有uuid，说明是绑定宝贝
-                let user = await userDao.getUser(connection, { openId: params.openId })
                 let child = await childDao.getChild(connection, { uuid: params.data.uuid })
                 await childDao.insertUnion(connection, { userId: user.userId, childId: child.childId, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
                 params.msg = '宝宝绑定成功'
@@ -91,9 +112,14 @@ class biz {
                 //没有uuid，说明是新增宝贝
                 params.data.uuid = uuid.v1();
                 let id = await childDao.insertClild(connection, params.data);
-                let user = await userDao.getUser(connection, { openId: params.openId })
                 await childDao.insertUnion(connection, { userId: user.userId, childId: id, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
                 params.msg = '宝宝添加成功'
+            }
+            //新增宝贝以后需要更新宝贝的菜单，标签
+            let menuMsg = await this.updateUserTagOrMenu(connection, user)
+            if (menuMsg != 'success') {
+                console.log('menuMsg', menuMsg)
+                params.msg = '宝宝添加成功,但是自定义菜单出现异常'
             }
             delete params.function
             delete params.biz
@@ -101,6 +127,10 @@ class biz {
         })
     }
 
+    /**
+     * 用uuid关联宝贝
+     * @param {*} params 
+     */
     static async bindChild(params) {
         if (!params.content) {
             params.msg = '请重新输入'
@@ -113,6 +143,128 @@ class biz {
         params.function = 'addUserRelation'
         return params
     }
+
+    /*************************************************TODO:分割线-以上是新增，关联宝贝的部分*************************************************/
+    /**
+     * 和微信公众号有关，用户添加修改标签，还有星标朋友菜单更新菜单，反正麻烦死的东西，所以在别人的基础上做自己的东西，就是这么麻烦，偏偏没办法不用
+     * 最开始没想做这么复杂的 _(´ཀ`」 ∠)_
+     */
+    static async updateUserTagOrMenu(connection, user) {
+        let children = await childDao.selectChildByOpenid(connection, { openId: user.openId }),
+            userTag,
+            isSuperUserFun = (tagidList) => {
+                let id = tagidList.find(id => {
+                    return id == 2//TODO:目前星标朋友 标签id都是2，如果以后有变化就在这这里改
+                })
+                if (!!id)
+                    return true
+                else
+                    return false
+            },
+            isSuperUser = false;
+        try {
+            userTag = await wxApi.getUserTag({ openId: user.openId })
+            isSuperUser = isSuperUserFun(userTag.tagid_list)
+        } catch (error) {
+            console.error('updateUserTagOrMenu:getUserTag:', error)
+            return '日常甩锅，微 信出bug了，标记1'
+        }
+        return await dao.manageTransactionConnection(async (connection) => {
+
+            if (isSuperUser) {
+                //超级用户，菜单定制
+                let menu = await userDao.getUserMenu(connection, { userId: user.userId })
+
+                if (!menu) {
+                    menu = {
+                        jsonString: menuBase
+                    }
+                }
+                let newBtn = []
+
+                children.forEach((child, index) => {
+                    let subBtn = {
+                        type: 'click',
+                        name: child.name,
+                        key: ''
+                    }
+                    switch (index) {
+                        case 0:
+                            subBtn.key = 'baby_one'
+                            newBtn.push(subBtn)
+                            break;
+                        case 1:
+                            subBtn.key = 'baby_two'
+                            newBtn.push(subBtn)
+                            break;
+                        case 2:
+                            subBtn.key = 'baby_three'
+                            newBtn.push(subBtn)
+                            break;
+                        case 3:
+                            subBtn.key = 'baby_four'
+                            newBtn.push(subBtn)
+                            break;
+                        case 4:
+                            subBtn.key = 'baby_five'
+                            newBtn.push(subBtn)
+                            break;
+                        default:
+                            subBtn.key = 'baby_more'
+                            subBtn.name = '更多宝贝'
+                            newBtn[4] = subBtn
+                            break;
+                    }
+                })
+                let obj;
+                if (menu.jsonString instanceof String)
+                    obj = JSON.parse(menu.jsonString)
+                else
+                    obj = menu.jsonString
+                obj.button.forEach(btn => {
+                    if (btn.name == '我的宝贝')
+                        btn.sub_button = newBtn;
+                })
+                try {
+                    if (!!menu.menuId)
+                        // 已经创建过菜单，更新菜单即可，没有更新操作，所以删除重建
+                        // 删除
+                        await wxApi.conditionalMenuDelete({ menuId: menu.menuId })
+                    if (!obj.matchrule.tag_id) {
+                        // 还没有创建过菜单，需要新建标签，新建菜单
+                        // 首先需要创建一个标签
+                        let tagBody = await wxApi.addUserTag({ tagName: user.openId })
+                        obj.matchrule.tag_id = tagBody.tag.id
+                        // 标签和用户关联
+                        await wxApi.userAddTag({ openId: user.openId, tagId: tagBody.tag.id })
+                    }
+                    // 发送 重建 请求
+                    let body = await wxApi.conditionalMenuCreate(obj);
+                    menu.menuId = body.menuid
+                } catch (error) {
+                    return '日常甩锅，微 信出bug了，标记2'
+                }
+
+                // 更新菜单管理
+                await userDao.insertOrUpdateMenu(connection, { userId: user.userId, menuId: menu.menuId, jsonString: JSON.stringify(obj) })
+            } else {
+                // 普通用户，通用菜单,按照标签关联菜单，
+                try {
+                    if (userTag.tagid_list.length > 0) {
+                        //说明这个用户已经关联过标签了，理论上只有一个标签
+                        await wxApi.cancelUserTag({ openId: user.openId, tagId: userTag.tagid_list[0] })
+                    }
+                    let tagId = await getTagByNum(children.length)
+                    await wxApi.userAddTag({ openId: user.openId, tagId: tagId })
+                } catch (error) {
+                    return '日常甩锅，微 信出bug了，标记3'
+                }
+            }
+            return 'success'
+        })
+    }
+
+    /*************************************************TODO:分割线-以上是公众号菜单的操作*************************************************/
 
     /**
      * 按钮 - 查询宝贝
@@ -154,7 +306,9 @@ class biz {
             let child = await childDao.getChildANDRelation(connection, { childId: childId, openId: params.openId })
             retMsg.msg = child.childRelation + ':' + child.name + '\n1、查询宝贝的编号\n2、查询宝贝今天的消息\n3、上传宝贝今日状态'
             retMsg.type = 'text'
+            retMsg.biz = './children'
             retMsg.function = 'babySearchChoise'
+            retMsg.data = child
             return retMsg
         })
     }
@@ -164,15 +318,35 @@ class biz {
         let retMsg = {}
         if (params.content == 1) {
             //查询编号
+            retMsg.msg = '宝贝编号：' + params.data.uuid + '\n1、查询宝贝的编号\n2、查询宝贝今天的消息\n3、上传宝贝今日状态'
+            retMsg.function = 'babySearchChoise'
+            retMsg.data = params.data
         } else if (params.content == 2) {
             //查询今日消息
+            
         } else if (params.content == 3) {
             //上传今日状态
+            retMsg.msg = '请发送一张图片'
+            retMsg.function = 'addBabyImg'
+            retMsg.data = params.data
         } else {
             retMsg.msg = '没有这个选择哦！请重新选一个'
         }
+        retMsg.biz = './children'
+
+        return retMsg;
     }
 
+    static async addBabyImg(params) {
+        let retMsg = {}
+        if (!params.content || !(params.content.indexOf('http://') >= 0)) {
+            retMsg.msg = '没有收到图片哦'
+        } else {
+            retMsg.msg = '请给上传的图片写一段描述\n栗子：儿子第一次吃馒头'
+            retMsg.data.img = params.content
+            //这里需要上传成一个永久素材
+        }
+    }
 
 }
 

@@ -112,6 +112,17 @@ class dao {
             where.push(`AND cm.\`status\` = '${params.status}'`)
         return (await dao.exec(connection, sql(), []))[0]
     }
+
+    static async insertChildDiary(connection, params) {
+        let sql = `INSERT INTO user_diary SET ?`,
+            obj = {
+                child_id: params.childId,
+                img_path: params.imgPath,
+                img_desc: params.imgDesc,
+            }
+
+        return await dao.exec(connection, sql, obj)
+    }
 }
 
 module.exports = dao;
