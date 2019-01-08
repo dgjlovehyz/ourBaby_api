@@ -217,7 +217,7 @@ class biz {
                     }
                 })
                 let obj;
-                if (menu.jsonString instanceof String)
+                if (_.isString(menu.jsonString))
                     obj = JSON.parse(menu.jsonString)
                 else
                     obj = menu.jsonString
@@ -323,7 +323,7 @@ class biz {
             retMsg.data = params.data
         } else if (params.content == 2) {
             //查询今日消息
-            
+
         } else if (params.content == 3) {
             //上传今日状态
             retMsg.msg = '请发送一张图片'
