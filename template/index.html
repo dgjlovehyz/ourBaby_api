@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="type.css" />
+</head>
+
+<body>
+    <header id="title">我是标题</header>
+    <ul id="text">
+        <li id='listofimgtext' v-for="item in items">
+            <img id="picture" :src="item.img">
+            <p id="contents">{{item.conten}}</p>
+        </li>
+    </ul>
+    <script src="./Framework/vue.js"></script>
+    <script>
+        var test = new Vue({
+            el: "#text",
+            data: {
+                items: tihuanneirong
+            }
+        })
+    </script>
+</body>
+
+
+</html>

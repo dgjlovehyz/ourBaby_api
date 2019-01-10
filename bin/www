@@ -2,6 +2,8 @@ const wechat = require('wechat');
 const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
+const dao = require('../framework/util/dao');
+const userDao = require('../business/dao/user');
 
 const app = express();
 
@@ -153,19 +155,14 @@ router.post('/wx/msg', wechat(config, wechat.text(function (message, req, res, n
 
 
 
-app.use(connect.cookieParser());
-app.use(connect.session({ secret: 'keyboard cat', cookie: { maxAge: 60000 } }));
-app.use('/wechat', wechat(config.token, wechat.text(function (info, req, res, next) {
-    if (info.Content === '=') {
-        var exp = req.wxsession.text.join('');
-        req.wxsession.text = '';
-        res.reply(exp);
-    } else {
-        req.wxsession.text = req.wxsession.text || [];
-        req.wxsession.text.push(info.Content);
-        res.reply('收到' + info.Content);
-    }
-})));
 
-app.listen(3000);
+// app.listen(3000);
+
+
+dao.manageTransactionConnection(async (connection) => {
+    console.log('执行')
+    let result = await userDao.getUser(connection, { FromUserName: 'sgrgreghr' })
+    console.log('result', result)
+})
+
 console.log('server start ,, prot : 80')
