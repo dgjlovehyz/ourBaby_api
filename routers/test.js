@@ -28,9 +28,9 @@ let a = async () => {
 
     // console.log('ret1', ret2)
 
-    // let ret3 = await wxCtr.textHandle({ FromUserName: 'oH9Bt1ROu1BpuNtL2rZatH13M-xk', Content: '爸爸' });
+    let ret3 = await wxCtr.textHandle({ FromUserName: 'oH9Bt1ROu1BpuNtL2rZatH13M-xk', Content: '爸爸' });
 
-    // console.log('ret1', ret3)
+    console.log('ret1', ret3)
 
     let ret4 = await wxCtr.textHandle({ FromUserName: 'oH9Bt1ROu1BpuNtL2rZatH13M-xk', Content: '女儿' });
 
