@@ -354,11 +354,12 @@ class biz {
         } else if (params.content == 2) {
             //查询今日消息
             return dao.manageConnection(async (connection) => {
-                let newsInfo = await mediaBiz.getNews(connection, params.data.childId)
-                if (!newsInfo) {
+                let newsMediaInfo = await mediaBiz.getNews(connection, params.data.childId)
+                if (!newsMediaInfo) {
                     retMsg.msg = '还没有上传任何状态哦'
                 } else {
-                    let newsInfo = await wxApi.getNews({ mediaId: newsInfo.mediaId })
+                    let newsInfo = await wxApi.getNews({ mediaId: newsMediaInfo.mediaId })
+                    let imgList = await childDao.searchDiary(connection, { childId: params.data.childId })
                     retMsg.msg = [{
                         title: newsInfo.title,
                         description: newsInfo.digest,
