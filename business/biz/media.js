@@ -93,6 +93,10 @@ class biz {
         }
     }
 
+    static async getNews(connection, childId) {
+        return await mediaDao.getNews(connection, { childId: childId })
+    }
+
 }
 
 module.exports = biz

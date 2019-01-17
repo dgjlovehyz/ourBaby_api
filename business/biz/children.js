@@ -353,7 +353,25 @@ class biz {
             retMsg.data = params.data
         } else if (params.content == 2) {
             //查询今日消息
-
+            return dao.manageConnection(async (connection) => {
+                let newsInfo = await mediaBiz.getNews(connection, params.data.childId)
+                if (!newsInfo) {
+                    retMsg.msg = '还没有上传任何状态哦'
+                } else {
+                    let newsInfo = await wxApi.getNews({ mediaId: newsInfo.mediaId })
+                    retMsg.msg = [{
+                        title: newsInfo.title,
+                        description: newsInfo.digest,
+                        picurl: imgList[0].mediaPath,
+                        url: newsInfo.url + '&t=' + Date.now()
+                    }, {
+                        title: newsInfo.title,
+                        description: newsInfo.digest,
+                        picurl: imgList[0].mediaPath,
+                        url: newsInfo.url + '&t=' + Date.now()
+                    }]
+                }
+            })
         } else if (params.content == 3) {
             //上传今日状态
             retMsg.msg = '请发送一张图片'
