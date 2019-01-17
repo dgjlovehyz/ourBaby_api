@@ -65,7 +65,7 @@ class biz {
 
             let newsMediaInfo = await mediaDao.getNews(connection, { childId: child.childId })
             list.forEach(element => {
-                let title = `<p style="text-align: center;line-height: 2em;letter-spacing: 2px;"><span style="font-size: 14px;">${child.userRelation}在${element.creatTime}上传</span></p>`
+                let title = `<p style="text-align: center;line-height: 2em;letter-spacing: 2px;"><span style="font-size: 14px;">${child.name}的${child.userRelation}在${element.creatTime}上传</span></p>`
                 let img = `<p style="max-width: 100%;min-height: 1em;white-space: pre-wrap;text-align: center;line-height: 25px;"><img class="" data-copyright="0" data-ratio="1" data-s="300,640" data-src="${element.mediaPath}" data-type="jpeg" data-w="258" style="letter-spacing: 0px; visibility: visible !important; width: 258px !important; height: auto !important;" _width="258px" src="${element.mediaPath}" crossorigin="anonymous" data-fail="0"></p>`
                 let desc = `<p style="text-align: center;line-height: 2em;letter-spacing: 2px;"><span style="font-size: 14px;">${element.imgDesc}</span></p>`
                 diary.content = diary.content + title + img + desc

@@ -400,7 +400,7 @@ class biz {
                     title: newsInfo.title,
                     description: newsInfo.digest,
                     picurl: imgList[0].mediaPath,
-                    url: newsInfo.url
+                    url: newsInfo.url + '&t=' + Date.now()
                 }]
             }
             return retMsg
