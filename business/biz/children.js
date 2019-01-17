@@ -104,9 +104,17 @@ class biz {
 
         return await dao.manageTransactionConnection(async (connection) => {
             let user = await userDao.getUser(connection, { openId: params.openId })
+            if (!user) {
+                params.msg = '用户信息不足，请重新关注公众号'
+                return params
+            }
             if (!!params.data.uuid) {
                 //有uuid，说明是绑定宝贝
                 let child = await childDao.getChild(connection, { uuid: params.data.uuid })
+                if (!child) {
+                    params.msg = '编号有问题'
+                    return params
+                }
                 await childDao.insertUnion(connection, { userId: user.userId, childId: child.childId, userRelation: params.data.userRelation, childRelation: params.data.childRelation })
                 params.msg = '宝宝绑定成功'
             } else {

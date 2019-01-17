@@ -64,6 +64,7 @@ class biz {
         if (!value) {
             value = { openId: params.FromUserName }
         }
+        value.openId = params.FromUserName
         let retMsg
 
         switch (params.EventKey) {

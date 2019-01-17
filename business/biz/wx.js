@@ -53,6 +53,7 @@ class biz {
         if (!value) {
             value = { openId: params.FromUserName }
         }
+        value.openId = params.FromUserName
         value.content = params.Content
         if (!!value.biz && !!value.function) {
             console.log('redis:', value)
@@ -84,6 +85,7 @@ class biz {
         if (!value) {
             value = { openId: params.FromUserName }
         }
+        value.openId = params.FromUserName
         value.imgPath = params.PicUrl
         value.mediaId = params.MediaId
         if (!!value.biz && !!value.function) {
