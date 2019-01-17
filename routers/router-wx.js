@@ -63,9 +63,12 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     //         }
     //     ]);
 
-    res.reply([
-        {mediaId: '9Jq0DLU5kdSzRies2N5MfSCyRRC_QFaSa5c5Mnkkme4'}
-    ])
+    try {
+        res.reply(await wxCtr.imgHandle(message))
+    } catch (error) {
+        console.error(error)
+        res.reply('系统报错了，别问他我为什么，我也不知道_(´ཀ`」 ∠)_')
+    }
 }).voice(async function (message, req, res, next) {
     // message为音频内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -76,6 +79,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // Format: 'amr',
     // MsgId: '5837397520665436492' }
     console.log('voice message:', message)
+    res.reply('目前不支持音频哦！！(๑•̀ㅂ•́)و✧')
 }).video(async function (message, req, res, next) {
     // message为视频内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -86,6 +90,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
     console.log('video message:', message)
+    res.reply('目前不支持视频哦！！(๑•̀ㅂ•́)و✧')
 }).shortvideo(async function (message, req, res, next) {
     // message为短视频内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -96,6 +101,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // ThumbMediaId: 'media_id',
     // MsgId: '5837397520665436492' }
     console.log('shortvideo message:', message)
+    res.reply('目前不支持短视频哦！！(๑•̀ㅂ•́)و✧')
 }).location(async function (message, req, res, next) {
     // message为位置内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -108,6 +114,8 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // Label: {},
     // MsgId: '5837398761910985062' }
     console.log('location message:', message)
+
+    res.reply('目前不支持定位服务哦！！(๑•̀ㅂ•́)و✧')
 }).link(async function (message, req, res, next) {
     // message为链接内容
     // { ToUserName: 'gh_d3e07d51b513',
@@ -119,6 +127,7 @@ router.post('/wx/msg', wechat(wxConfig, wechat.text(async function (message, req
     // Url: 'http://1024.com/',
     // MsgId: '5837397520665436492' }
     console.log('link message:', message)
+    res.reply('目前不支持链接哦！！(๑•̀ㅂ•́)و✧')
 }).event(async function (message, req, res, next) {
     // message为事件内容
     // { ToUserName: 'gh_d3e07d51b513',

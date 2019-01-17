@@ -11,6 +11,7 @@ const dao = require('../../framework/util/dao');
 const wxApi = require('../../util/wx_api');
 const getTagByNum = require('../../constant/wx_menu').getTagByNum;
 const menuBase = require('../../constant/wx_menu').conditionalMenu;
+const mediaBiz = require('./media');
 
 class biz {
     /**
@@ -299,16 +300,37 @@ class biz {
         })
     }
 
+    /**
+     * 通过序号查询宝贝，这个需要是按照
+     * @param {*} params 
+     * @param {*} index 
+     */
+    static async searchChildInfoByIndex(params, index) {
+        params.index = index;
+        return await this.searchChildInfo(params)
+    }
     static async searchChildInfo(params) {
-        let retMsg = {}
-        let childId = params.data['child' + params.content]
+        let retMsg = {},
+            query = {}
+        query.openId = params.openId
+        let index = 0;
+        if (!!params.index || params.index == 0) {
+            // 按照索引查询，
+            query.index = params.index
+            index = params.index
+        } else if (!!params.content) {
+            // 按照宝贝id查询
+            query.childId = params.data['child' + params.content]
+            index = params.content - 1
+        }
         return await dao.manageConnection(async (connection) => {
-            let child = await childDao.getChildANDRelation(connection, { childId: childId, openId: params.openId })
+            let child = await childDao.getChildANDRelation(connection, query)
             retMsg.msg = child.childRelation + ':' + child.name + '\n1、查询宝贝的编号\n2、查询宝贝今天的消息\n3、上传宝贝今日状态'
             retMsg.type = 'text'
             retMsg.biz = './children'
             retMsg.function = 'babySearchChoise'
             retMsg.data = child
+            retMsg.data.index = index
             return retMsg
         })
     }
@@ -339,13 +361,50 @@ class biz {
 
     static async addBabyImg(params) {
         let retMsg = {}
-        if (!params.content || !(params.content.indexOf('http://') >= 0)) {
+        if (!params.imgPath || !(params.imgPath.indexOf('http://') >= 0)) {
             retMsg.msg = '没有收到图片哦'
         } else {
             retMsg.msg = '请给上传的图片写一段描述\n栗子：儿子第一次吃馒头'
-            retMsg.data.img = params.content
-            //这里需要上传成一个永久素材
+            retMsg.data = params.data
+            retMsg.data.imgPath = params.imgPath
+            retMsg.data.mediaId = params.mediaId
+            retMsg.function = 'addImgComment'
         }
+        retMsg.biz = './children'
+        return retMsg;
+    }
+
+    static async addImgComment(params) {
+        let retMsg = {}
+        if (!params.content) {
+            retMsg.msg = '请重新输入'
+            return retMsg
+        }
+
+        return await dao.manageTransactionConnection(async (connection) => {
+            let imgId = await mediaBiz._saveImgMedia(connection, params)
+            // 保存今日状态
+            await childDao.insertOrUpdateChildDiary(connection, { childId: params.data.childId, imgId: imgId, imgDesc: params.content })
+            // 查当天的动态
+            let imgList = await childDao.searchDiary(connection, { childId: params.data.childId })
+            if (imgList.length <= 0) {
+                retMsg.msg = '今日动态保存失败或遇到其他问题'
+                return retMsg;
+            }
+            //处理永久图文素材，然后返回给用户
+            let newsInfo = (await mediaBiz.newsHandle(connection, params.data, imgList)).news_item[0]
+            if (_.isString(newsInfo))
+                retMsg.msg = newsInfo
+            else {
+                retMsg.msg = [{
+                    title: newsInfo.title,
+                    description: newsInfo.digest,
+                    picurl: imgList[0].mediaPath,
+                    url: newsInfo.url
+                }]
+            }
+            return retMsg
+        })
     }
 
 }

@@ -2,7 +2,8 @@ const https = require('https');
 const request = require('request');
 const { api, config } = require('../config/system-config').wechat;
 const redis = require('./redis');
-const Exception = require('../framework/exception/exception')
+const Exception = require('../framework/exception/exception');
+const _ = require('underscore');
 
 
 class wxApi {
@@ -33,23 +34,40 @@ class wxApi {
             request(reqInfo, async (err, res, body) => {
                 if (err) reject(err)
                 if (!!body.errcode && body.errcode != 0) reject(body)
+                if (_.isString(body))
+                    body = JSON.parse(body)
                 return resolve(body)
             })
         })
     }
-
+    /**
+     * 目前来说只支持图片链接转成永久素材
+     * @param {*} params 
+     */
     static async addMaterial(params) {
         let reqInfo = {
             url: api.addMaterial.replace('{0}', await wxApi.getWxTokenByRedis()),
             method: 'POST',
-            json: true,
-            body: params
+            formData: {
+                media: {
+                    value: undefined,
+                    options: {
+                        filename: '2.png',
+                        contentType: 'image/png'
+                    }
+                },
+            }
         }
         return new Promise((resolve, reject) => {
-            request(reqInfo, async (err, res, body) => {
-                if (err) reject(err)
-                if (!!body.errcode && body.errcode != 0) reject(body)
-                return resolve(body)
+            request.get(params.imgPath).on('response', async (response) => {
+                reqInfo.formData.media.value = response
+                request(reqInfo, (err, resp, body) => {
+                    if (err) reject(err)
+                    if (!!body.errcode && body.errcode != 0) reject(body)
+                    if (_.isString(body))
+                    body = JSON.parse(body)
+                    return resolve(body)
+                })
             })
         })
     }
@@ -69,6 +87,8 @@ class wxApi {
             request(reqInfo, async (err, res, body) => {
                 if (err) reject(err)
                 if (!!body.errcode && body.errcode != 0) reject(body)
+                if (_.isString(body))
+                    body = JSON.parse(body)
                 return resolve(body)
             })
         })
@@ -87,7 +107,7 @@ class wxApi {
             request(reqInfo, async (err, res, body) => {
                 if (err) reject(err)
                 if (!!body.errcode && body.errcode != 0) reject(body)
-                if (body instanceof String)
+                if (_.isString(body))
                     body = JSON.parse(body)
                 resolve(body)
             })
@@ -108,7 +128,7 @@ class wxApi {
             request(reqInfo, async (err, res, body) => {
                 if (err) reject(err)
                 if (!!body.errcode && body.errcode != 0) reject(body)
-                if (body instanceof String)
+                if (_.isString(body))
                     body = JSON.parse(body)
                 resolve(body)
             })
@@ -167,6 +187,10 @@ class wxApi {
         })
     }
 
+    /**
+     * 删除个性化菜单
+     * @param {*} params 
+     */
     static async conditionalMenuDelete(params) {
         let reqInfo = {
             url: api.conditionalMenuDelete.replace('{0}', await wxApi.getWxTokenByRedis()),
@@ -185,6 +209,10 @@ class wxApi {
         })
     }
 
+    /**
+     * 创建个性化菜单
+     * @param {*} params 菜单json结构
+     */
     static async conditionalMenuCreate(params) {
         let reqInfo = {
             url: api.conditionalMenuCreate.replace('{0}', await wxApi.getWxTokenByRedis()),
@@ -196,14 +224,84 @@ class wxApi {
             request(reqInfo, async (err, res, body) => {
                 if (err) reject(err)
                 if (!!body.errcode && body.errcode != 0) reject(body)
-                if (body instanceof String)
+                if (_.isString(body))
                     body = JSON.parse(body)
                 resolve(body)
             })
         })
     }
 
+    /**
+     * 新增永久图文素材
+     * @param {*} params 
+     */
+    static async addNews(params) {
+        let reqInfo = {
+            url: api.addNews.replace('{0}', await wxApi.getWxTokenByRedis()),
+            method: 'POST',
+            json: true,
+            body: {
+                articles: []
+            }
+        }
+        
+        reqInfo.body.articles.push(params.diary)
+        return new Promise((resolve, reject) => {
+            request(reqInfo, async (err, res, body) => {
+                if (err) reject(err)
+                if (!!body.errcode && body.errcode != 0) reject(body)
+                if (_.isString(body))
+                    body = JSON.parse(body)
+                resolve(body)
+            })
+        })
+    }
 
+    static async updateNews(params) {
+        let reqInfo = {
+            url: api.updateNews.replace('{0}', await wxApi.getWxTokenByRedis()),
+            method: 'POST',
+            json: true,
+            body: {
+                media_id: params.mediaId,
+                index: params.index || 0,
+                articles: params.diary
+            }
+        }
+        return new Promise((resolve, reject) => {
+            request(reqInfo, async (err, res, body) => {
+                if (err) reject(err)
+                if (!!body.errcode && body.errcode != 0) reject(body)
+                if (_.isString(body))
+                    body = JSON.parse(body)
+                resolve(body)
+            })
+        })
+    }
+
+    static async getNews(params) {
+        let reqInfo = {
+            url: api.getNews.replace('{0}', await wxApi.getWxTokenByRedis()),
+            method: 'POST',
+            json: true,
+            body: {
+                media_id: params.mediaId
+            }
+        }
+        return new Promise((resolve, reject) => {
+            request(reqInfo, async (err, res, body) => {
+                if (err) reject(err)
+                if (!!body.errcode && body.errcode != 0) reject(body)
+                if (_.isString(body))
+                    body = JSON.parse(body)
+                resolve(body)
+            })
+        })
+    }
+
+    /**
+     * 获取微信token
+     */
     static async getWxTokenByRedis() {
         let token = await redis.get('wxToken')
         if (!token)

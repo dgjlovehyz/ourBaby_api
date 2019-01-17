@@ -58,13 +58,48 @@ class biz {
             console.log('redis:', value)
             let ret = await require(value.biz)[value.function](value)
             redis.set(key, ret, 300)
-            returnMsg.content = ret.msg
-            returnMsg.type = 'text'
+            if (_.isArray(ret.msg)) {
+                returnMsg = ret.msg
+            } else if (_.isString(ret.msg)) {
+                returnMsg.content = ret.msg
+                returnMsg.type = ret.type || 'text'
+            }
         } else {
             returnMsg.content = '不知道你想要什么╮(╯▽╰)╭'
             returnMsg.type = 'text'
         }
 
+        return returnMsg
+    }
+
+    static async imgHandle(params) {
+        let key = 'openid:' + params.FromUserName,
+            value = await redis.get(key),
+            returnMsg = {
+                content: '',
+                type: ''
+            }
+        if (_.isString(value))
+            value = JSON.parse(value)
+        if (!value) {
+            value = { openId: params.FromUserName }
+        }
+        value.imgPath = params.PicUrl
+        value.mediaId = params.MediaId
+        if (!!value.biz && !!value.function) {
+            console.log('redis:', value)
+            let ret = await require(value.biz)[value.function](value)
+            redis.set(key, ret, 300)
+            if (_.isArray(ret.msg)) {
+                returnMsg = ret.msg
+            } else if (_.isString(ret.msg)) {
+                returnMsg.content = ret.msg
+                returnMsg.type = ret.type || 'text'
+            }
+        } else {
+            returnMsg.content = '不知道你想要什么╮(╯▽╰)╭'
+            returnMsg.type = 'text'
+        }
         return returnMsg
     }
 

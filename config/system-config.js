@@ -20,7 +20,7 @@ const config = {
             // 个性化菜单删除
             conditionalMenuDelete: 'https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token={0}',
             // 添加永久素材素材，比较麻烦，需要通过request.get获取图片流，在上传
-            addMaterial: 'https://api.weixin.qq.com/cgi-bin/material/add_material?access_token={0}',
+            addMaterial: 'https://api.weixin.qq.com/cgi-bin/material/add_material?type=image&access_token={0}',
             // 和上面的一样，但是通过微信公众号获取的图片，已经是这类图片了，不需要再做操作，这个接口应该是微信提供给外部图片的
             uploadImg: 'https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token={0}',
             // 创建用户标签
@@ -31,7 +31,12 @@ const config = {
             userAddTag: 'https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token={0}',
             // 取消用户身上的标签
             cancelUserTag: 'https://api.weixin.qq.com/cgi-bin/tags/members/batchuntagging?access_token={0}',
-
+            // 新增永久图文素材
+            addNews: 'https://api.weixin.qq.com/cgi-bin/material/add_news?access_token={0}',
+            // 修改永久素材
+            updateNews: 'https://api.weixin.qq.com/cgi-bin/material/update_news?access_token={0}',
+            // 获取永久图文素材
+            getNews: 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token={0}',
         }
     }
 }

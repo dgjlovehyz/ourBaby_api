@@ -1,4 +1,4 @@
-'use starict'
+'use strict'
 
 const dao = require('../../framework/util/dao');
 const redisConfig = require('../../config/system-config').redis;
@@ -64,6 +64,7 @@ class biz {
         if (!value) {
             value = { openId: params.FromUserName }
         }
+        let retMsg
 
         switch (params.EventKey) {
             case 'baby_add':
@@ -75,7 +76,7 @@ class biz {
                 break;
             case 'baby_search':
                 //查询
-                let retMsg = await children.searchChildren({ openId: params.FromUserName });
+                retMsg = await children.searchChildren({ openId: params.FromUserName });
                 value.biz = retMsg.biz
                 value.function = retMsg.function
                 value.data = retMsg.data
@@ -114,21 +115,42 @@ class biz {
                 break;
             case 'baby_one':
                 //查询第一个宝贝
+                value = await children.searchChildInfoByIndex(value, 0)
+                returnMsg.content = value.msg
+                returnMsg.type = value.type
                 break;
             case 'baby_two':
                 //查询第二个宝贝
+                value = await children.searchChildInfoByIndex(value, 1)
+                returnMsg.content = value.msg
+                returnMsg.type = value.type
                 break;
             case 'baby_three':
                 //查询第三个宝贝
+                value = await children.searchChildInfoByIndex(value, 2)
+                returnMsg.content = value.msg
+                returnMsg.type = value.type
                 break;
             case 'baby_four':
                 //查询第四个宝贝
+                value = await children.searchChildInfoByIndex(value, 3)
+                returnMsg.content = value.msg
+                returnMsg.type = value.type
                 break;
             case 'baby_five':
                 //查询第五个宝贝
+                value = await children.searchChildInfoByIndex(value, 4)
+                returnMsg.content = value.msg
+                returnMsg.type = value.type
                 break;
             case 'baby_more':
                 //查询更多宝贝
+                retMsg = await children.searchChildren({ openId: params.FromUserName });
+                value.biz = retMsg.biz
+                value.function = retMsg.function
+                value.data = retMsg.data
+                returnMsg.content = retMsg.msg
+                returnMsg.type = retMsg.type
                 break;
             default:
                 return {

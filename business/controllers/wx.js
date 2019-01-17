@@ -22,8 +22,11 @@ class ctl {
         return await wxBiz.wxMesage(params);
     }
 
-    static async textHandle(param) {
-        return await wxBiz.textHandle(param)
+    static async textHandle(params) {
+        return await wxBiz.textHandle(params)
+    }
+    static async imgHandle(params){
+        return await wxBiz.imgHandle(params)
     }
 }
 
