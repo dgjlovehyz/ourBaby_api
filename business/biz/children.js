@@ -358,7 +358,7 @@ class biz {
                 if (!newsMediaInfo) {
                     retMsg.msg = '还没有上传任何状态哦'
                 } else {
-                    let newsInfo = await wxApi.getNews({ mediaId: newsMediaInfo.mediaId })
+                    let newsInfo = (await wxApi.getNews({ mediaId: newsMediaInfo.mediaId })).news_item[0]
                     let imgList = await childDao.searchDiary(connection, { childId: params.data.childId })
                     retMsg.msg = [{
                         title: newsInfo.title,
