@@ -353,7 +353,7 @@ class biz {
             retMsg.data = params.data
         } else if (params.content == 2) {
             //查询今日消息
-            return dao.manageConnection(async (connection) => {
+            return await dao.manageConnection(async (connection) => {
                 let newsMediaInfo = await mediaBiz.getNews(connection, params.data.childId)
                 if (!newsMediaInfo) {
                     retMsg.msg = '还没有上传任何状态哦'
@@ -372,6 +372,7 @@ class biz {
                         url: newsInfo.url + '&t=' + Date.now()
                     }]
                 }
+                return retMsg
             })
         } else if (params.content == 3) {
             //上传今日状态
