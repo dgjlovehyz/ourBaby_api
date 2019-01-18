@@ -157,6 +157,13 @@ class dao {
         where cd.child_id = ? and TO_DAYS(cd.create_time) = TO_DAYS(now())`
         return await this.exec(connection, sql, [params.childId])
     }
+
+    static async getDiary(connection, params) {
+        let sql = `select ${child_diary_prefix},${img_info_prefix} from child_diary cd 
+        left join img_info ii on ii.id = cd.img_id
+        where cd.child_id = ? order by cd.create_time desc limit 1`
+        return (await this.exec(connection, sql, [params.childId]))[0]
+    }
 }
 
 module.exports = dao;

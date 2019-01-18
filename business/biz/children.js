@@ -359,18 +359,22 @@ class biz {
                     retMsg.msg = '还没有上传任何状态哦'
                 } else {
                     let newsInfo = (await wxApi.getNews({ mediaId: newsMediaInfo.mediaId })).news_item[0]
-                    let imgList = await childDao.searchDiary(connection, { childId: params.data.childId })
-                    retMsg.msg = [{
-                        title: newsInfo.title,
-                        description: newsInfo.digest,
-                        picurl: imgList[0].mediaPath,
-                        url: newsInfo.url + '&t=' + Date.now()
-                    }, {
-                        title: newsInfo.title,
-                        description: newsInfo.digest,
-                        picurl: imgList[0].mediaPath,
-                        url: newsInfo.url + '&t=' + Date.now()
-                    }]
+                    let diaryInfo = await childDao.getDiary(connection, { childId: params.data.childId })
+                    if (!diaryInfo) {
+                        retMsg.msg = '没有找到图片'
+                    } else {
+                        retMsg.msg = [{
+                            title: newsInfo.title,
+                            description: newsInfo.digest,
+                            picurl: diaryInfo.mediaPath,
+                            url: newsInfo.url + '&t=' + Date.now()
+                        }, {
+                            title: newsInfo.title,
+                            description: newsInfo.digest,
+                            picurl: diaryInfo.mediaPath,
+                            url: newsInfo.url + '&t=' + Date.now()
+                        }]
+                    }
                 }
                 return retMsg
             })
