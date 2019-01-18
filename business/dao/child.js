@@ -14,6 +14,7 @@ const child_prefix = `
         cd.child_id childId,
         cd.img_id imgId,
         cd.img_desc imgDesc,
+        cd.author,
         DATE_FORMAT(cd.create_time,'%Y-%m-%d %T') as creatTime
         `,
     img_info_prefix = `
@@ -144,7 +145,7 @@ class dao {
     }
 
     static async insertOrUpdateChildDiary(connection, params) {
-        let sql = `INSERT INTO child_diary (child_id,img_id,img_desc) values(${params.childId},${params.imgId},'${params.imgDesc}') 
+        let sql = `INSERT INTO child_diary (child_id,img_id,img_desc,author) values(${params.childId},${params.imgId},'${params.imgDesc}','${params.userRelation}') 
         ON DUPLICATE KEY UPDATE img_desc=values(img_desc)`
 
         let result = await this.exec(connection, sql, [])

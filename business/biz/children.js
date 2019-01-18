@@ -416,7 +416,7 @@ class biz {
         return await dao.manageTransactionConnection(async (connection) => {
             let imgId = await mediaBiz._saveImgMedia(connection, params)
             // 保存今日状态
-            await childDao.insertOrUpdateChildDiary(connection, { childId: params.data.childId, imgId: imgId, imgDesc: params.content })
+            await childDao.insertOrUpdateChildDiary(connection, { childId: params.data.childId, imgId: imgId, imgDesc: params.content, userRelation: params.data.userRelation })
             // 查当天的动态
             let imgList = await childDao.searchDiary(connection, { childId: params.data.childId })
             if (imgList.length <= 0) {
